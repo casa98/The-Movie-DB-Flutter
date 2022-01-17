@@ -11,9 +11,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: 'home',
       routes: {
-        'home': (_) => HomeScreen(),
-        'detail': (_) => DetailsScreen(),
+        'home': (_) => const HomeScreen(),
+        'details': (_) => const DetailsScreen(),
       },
+      theme: ThemeData().copyWith(
+        appBarTheme: const AppBarTheme(
+          elevation: 0.0,
+          color: Colors.indigo,
+        ),
+      ),
     );
   }
 }
