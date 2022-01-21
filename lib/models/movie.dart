@@ -10,8 +10,8 @@ class Movie {
     required this.originalTitle,
     required this.overview,
     required this.popularity,
-     this.posterPath,
-     this.releaseDate,
+    this.posterPath,
+    this.releaseDate,
     required this.title,
     required this.video,
     required this.voteAverage,
@@ -32,6 +32,13 @@ class Movie {
   bool video;
   double voteAverage;
   int voteCount;
+
+  get fullPosterImg {
+    if (posterPath != null) {
+      return "https://image.tmdb.org/t/p/w500$posterPath";
+    }
+    return "https://i.stack.imgur.com/GNhxO.png";
+  }
 
   factory Movie.fromJson(String str) => Movie.fromMap(json.decode(str));
 

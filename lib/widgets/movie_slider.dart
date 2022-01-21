@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/models/models.dart';
+import 'package:movies_app/providers/movies_provider.dart';
+import 'package:provider/provider.dart';
 
 class MovieSlider extends StatelessWidget {
   const MovieSlider({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final popularMovies = context.watch<MoviesProvider>().popularMovies;
+    return SizedBox(
       width: double.infinity,
       height: 270.0,
       child: Column(
@@ -21,9 +25,10 @@ class MovieSlider extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
-              itemCount: 20,
+              itemCount: popularMovies.length,
               scrollDirection: Axis.horizontal,
-              itemBuilder: (_, index) => const _MoviePoster(),
+              itemBuilder: (_, index) =>
+                  _MoviePoster(movie: popularMovies[index]),
             ),
           ),
         ],
@@ -33,7 +38,8 @@ class MovieSlider extends StatelessWidget {
 }
 
 class _MoviePoster extends StatelessWidget {
-  const _MoviePoster({Key? key}) : super(key: key);
+  const _MoviePoster({Key? key, required this.movie}) : super(key: key);
+  final Movie movie;
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +54,8 @@ class _MoviePoster extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
               child: FadeInImage(
-                placeholder: AssetImage("assets/no-image.jpg"),
-                image: NetworkImage("https://via.placeholder.com/300x400"),
+                placeholder: const AssetImage("assets/no-image.jpg"),
+                image: NetworkImage(movie.fullPosterImg),
                 width: 120.0,
                 height: 160.0,
                 fit: BoxFit.cover,
@@ -61,7 +67,7 @@ class _MoviePoster extends StatelessWidget {
             padding: const EdgeInsets.all(4.0),
             child: Center(
               child: Text(
-                "Movie titl hehe Los Del SurSur Si",
+                movie.title,
                 style: Theme.of(context).textTheme.subtitle1,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
