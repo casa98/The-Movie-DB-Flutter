@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:movies_app/providers/movies_provider.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +12,7 @@ class HomeScreen extends StatelessWidget {
     final moviesProvider = context.watch<MoviesProvider>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Películas de Cine"),
+        title: const Text("Películas en Cine"),
         actions: [
           IconButton(
             onPressed: () {},
