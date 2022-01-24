@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,6 +10,7 @@ class MoviesProvider extends ChangeNotifier {
 
   List<Movie> onPlayingNowMovies = [];
   List<Movie> popularMovies = [];
+  int _popularPage = 0;
 
   MoviesProvider() {
     getNowPlayingMovies();
@@ -20,22 +19,21 @@ class MoviesProvider extends ChangeNotifier {
 
   getNowPlayingMovies() async {
     final response = await getJsonData("3/movie/now_playing");
-    log(response);
     final onPlayingNowMovies = NowPlayingResponse.fromJson(response);
     this.onPlayingNowMovies = [...onPlayingNowMovies.movies];
     notifyListeners();
   }
 
   getPopularMovies() async {
-    final response = await getJsonData("3/movie/popular", page: 1);
-    log(response);
+    final response = await getJsonData("3/movie/popular", page: ++_popularPage);
     final popularMovies = PopularResponse.fromJson(response);
     // It concatenates new movies to existing one (used when paging)
     this.popularMovies = [...this.popularMovies, ...popularMovies.movies];
+    notifyListeners();
   }
 
   Future<String> getJsonData(String endpoint, {int page = 1}) async {
-    var url = Uri.https(
+    final url = Uri.https(
       _baseUrl,
       endpoint,
       {"language": _language, "api_key": _apiKey, "page": "$page"},

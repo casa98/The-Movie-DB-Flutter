@@ -1,14 +1,37 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:movies_app/models/models.dart';
-import 'package:movies_app/providers/movies_provider.dart';
-import 'package:provider/provider.dart';
 
-class MovieSlider extends StatelessWidget {
-  const MovieSlider({Key? key}) : super(key: key);
+class MovieSlider extends StatefulWidget {
+  const MovieSlider({
+    Key? key,
+    required this.movies,
+    required this.onNextpage,
+  }) : super(key: key);
+  final List<Movie> movies;
+  final VoidCallback onNextpage;
+
+  @override
+  State<MovieSlider> createState() => _MovieSliderState();
+}
+
+class _MovieSliderState extends State<MovieSlider> {
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+          scrollController.position.maxScrollExtent - 300) {
+        widget.onNextpage();
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final popularMovies = context.watch<MoviesProvider>().popularMovies;
     return SizedBox(
       width: double.infinity,
       height: 270.0,
@@ -25,15 +48,22 @@ class MovieSlider extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
-              itemCount: popularMovies.length,
+              controller: scrollController,
+              itemCount: widget.movies.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (_, index) =>
-                  _MoviePoster(movie: popularMovies[index]),
+                  _MoviePoster(movie: widget.movies[index]),
             ),
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 }
 
