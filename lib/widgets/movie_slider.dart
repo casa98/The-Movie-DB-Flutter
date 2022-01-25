@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:movies_app/models/models.dart';
 
@@ -41,7 +39,7 @@ class _MovieSliderState extends State<MovieSlider> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12.0),
             child: Text(
-              "Popular Movies",
+              "Popular",
               style: Theme.of(context).textTheme.headline6,
             ),
           ),
@@ -79,8 +77,11 @@ class _MoviePoster extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => Navigator.pushNamed(context, "details",
-                arguments: "movie-instance"),
+            onTap: () => Navigator.pushNamed(
+              context,
+              "details",
+              arguments: movie,
+            ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
               child: FadeInImage(
@@ -92,7 +93,6 @@ class _MoviePoster extends StatelessWidget {
               ),
             ),
           ),
-          // const SizedBox(height: 4.0),
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Center(

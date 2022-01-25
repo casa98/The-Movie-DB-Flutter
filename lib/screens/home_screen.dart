@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
     final moviesProvider = context.watch<MoviesProvider>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Películas en Cine"),
+        title: const Text("Now Playing Movies"),
         actions: [
           IconButton(
             onPressed: () {},

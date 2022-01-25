@@ -27,11 +27,10 @@ class CardSwiper extends StatelessWidget {
         itemCount: movies.length,
         autoplay: true,
         onTap: (int i) {
-          log(i.toString());
           Navigator.pushNamed(
             context,
             "details",
-            arguments: "movie-instance",
+            arguments: movies[i],
           );
         },
         layout: SwiperLayout.STACK,
