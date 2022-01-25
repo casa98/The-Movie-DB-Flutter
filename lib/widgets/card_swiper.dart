@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:movies_app/models/models.dart';
@@ -38,12 +36,16 @@ class CardSwiper extends StatelessWidget {
         itemHeight: size.height * 0.48,
         itemBuilder: (_, int index) {
           final movie = movies[index];
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: FadeInImage(
-              placeholder: const AssetImage("assets/no-image.jpg"),
-              image: NetworkImage(movie.fullPosterImg),
-              fit: BoxFit.cover,
+          movie.heroId = "swiper-${movie.id}";
+          return Hero(
+            tag: movie.heroId!,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: FadeInImage(
+                placeholder: const AssetImage("assets/no-image.jpg"),
+                image: NetworkImage(movie.fullPosterImg),
+                fit: BoxFit.cover,
+              ),
             ),
           );
         },
