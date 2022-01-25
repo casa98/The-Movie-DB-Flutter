@@ -11,6 +11,7 @@ class MoviesProvider extends ChangeNotifier {
   List<Movie> onPlayingNowMovies = [];
   List<Movie> popularMovies = [];
   int _popularPage = 0;
+  // https://api.themoviedb.org/3/movie/524434/credits?api_key=747a68d2e18d087e667644e35b545555&language=en-US
 
   MoviesProvider() {
     getNowPlayingMovies();
@@ -30,6 +31,12 @@ class MoviesProvider extends ChangeNotifier {
     // It concatenates new movies to existing one (used when paging)
     this.popularMovies = [...this.popularMovies, ...popularMovies.movies];
     notifyListeners();
+  }
+
+  Future<List<Cast>> getMovieCast(int movieId) async {
+    final response = await getJsonData("3/movie/$movieId/credits");
+    final creditsResponse = CreditsResponse.fromJson(response);
+    return creditsResponse.cast;
   }
 
   Future<String> getJsonData(String endpoint, {int page = 1}) async {
