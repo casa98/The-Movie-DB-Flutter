@@ -47,9 +47,10 @@ class MovieSearchDelegate extends SearchDelegate {
     }
 
     final moviesProvider = context.read<MoviesProvider>();
+    moviesProvider.getSuggestionsByQuery(query);
 
-    return FutureBuilder<List<Movie>>(
-      future: moviesProvider.searchMovie(query),
+    return StreamBuilder<List<Movie>>(
+      stream: moviesProvider.suggestionStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());

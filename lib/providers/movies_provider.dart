@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:movies_app/helpers/debouncer.dart';
 
 import 'package:movies_app/models/models.dart';
 import 'package:movies_app/models/search_movie_response.dart';
@@ -12,7 +16,14 @@ class MoviesProvider extends ChangeNotifier {
   List<Movie> onPlayingNowMovies = [];
   List<Movie> popularMovies = [];
   int _popularPage = 0;
-  // https://api.themoviedb.org/3/movie/524434/credits?api_key=747a68d2e18d087e667644e35b545555&language=en-US
+
+  final debouncer = Debouncer(
+    duration: const Duration(milliseconds: 500),
+  );
+  final StreamController<List<Movie>> _suggestionStreamController =
+      StreamController.broadcast();
+  Stream<List<Movie>> get suggestionStream =>
+      _suggestionStreamController.stream;
 
   MoviesProvider() {
     getNowPlayingMovies();
@@ -61,5 +72,21 @@ class MoviesProvider extends ChangeNotifier {
     final response = await http.get(url);
     final searchResponse = SearchMovieResponse.fromJson(response.body);
     return searchResponse.movies;
+  }
+
+  void getSuggestionsByQuery(String searchTerm) {
+    debouncer.value = "";
+    debouncer.onValue = (value) async {
+      log("Query to search: $value");
+      final response = await searchMovie(value);
+      _suggestionStreamController.add(response);
+    };
+
+    final timer = Timer.periodic(const Duration(milliseconds: 200), (_) {
+      debouncer.value = searchTerm;
+    });
+
+    Future.delayed(const Duration(milliseconds: 201))
+        .then((_) => timer.cancel());
   }
 }
