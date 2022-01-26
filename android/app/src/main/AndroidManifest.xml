@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.casa98.moviesapp.movies_app">
+
+    <uses-permission android:name="android.permission.INTERNET" /> 
+    
    <application
         android:label="movies_app"
         android:name="${applicationName}"
